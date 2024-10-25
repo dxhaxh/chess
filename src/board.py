@@ -33,6 +33,7 @@ class Board:
         self.squares[otherRow][5] = Square(otherRow, 5, Bishop(colour))
         self.squares[otherRow][3] = Square(otherRow, 3, Queen(colour))
         self.squares[otherRow][4] = Square(otherRow, 4, King(colour))
+        self.squares[4][4] = Square(4, 4, Queen('white'))
 
     def calcMoves(self, piece, row, col):
 
@@ -78,6 +79,151 @@ class Board:
                     final=Square(possRow, possCol)
                     move=Move(initial, final)
                     piece.addMoves(move)
+
+            
+        def lineMoves():
+            for i in range(1, 8):
+                possRow = row+i
+                if Square.inrange(possRow):
+                    if self.squares[possRow][col].hasTeamPiece(piece.colour):
+                        break
+                    if self.squares[possRow][col].hasRivalPiece(piece.colour):
+                        initial=Square(row, col)
+                        final=Square(possRow, col)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
+                        break
+                    initial=Square(row, col)
+                    final=Square(possRow, col)
+                    move=Move(initial, final)
+                    piece.addMoves(move)
+                else:
+                    break
+            for i in range(1, 8):
+                possRow = row-i
+                if Square.inrange(possRow):
+                    if self.squares[possRow][col].hasTeamPiece(piece.colour):
+                        break
+                    if self.squares[possRow][col].hasRivalPiece(piece.colour):
+                        initial=Square(row, col)
+                        final=Square(possRow, col)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
+                        break
+                    initial=Square(row, col)
+                    final=Square(possRow, col)
+                    move=Move(initial, final)
+                    piece.addMoves(move)
+                else:
+                    break
+            for j in range(1, 8):
+                possCol = row+j
+                if Square.inrange(possCol):
+                    if self.squares[row][possCol].hasTeamPiece(piece.colour):
+                        break
+                    if self.squares[row][possCol].hasRivalPiece(piece.colour):
+                        initial=Square(row, col)
+                        final=Square(row, possCol)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
+                        break
+                    initial=Square(row, col)
+                    final=Square(row, possCol)
+                    move=Move(initial, final)
+                    piece.addMoves(move)
+                else:
+                    break
+            for j in range(1, 8):
+                possCol = row-j
+                if Square.inrange(possCol):
+                    if self.squares[row][possCol].hasTeamPiece(piece.colour):
+                        break
+                    if self.squares[row][possCol].hasRivalPiece(piece.colour):
+                        initial=Square(row, col)
+                        final=Square(row, possCol)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
+                        break
+                    initial=Square(row, col)
+                    final=Square(row, possCol)
+                    move=Move(initial, final)
+                    piece.addMoves(move)
+                else:
+                    break
+
+        def diagMoves():
+            for i in range(1, 8):
+                possRow = row - i
+                possCol = col + i
+                if Square.inrange(possRow, possCol):
+                    if self.squares[possRow][possCol].hasTeamPiece(piece.colour):
+                        break
+                    if self.squares[possRow][possCol].hasRivalPiece(piece.colour):
+                        initial=Square(row, col)
+                        final=Square(possRow, possCol)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
+                        break
+                    initial=Square(row, col)
+                    final=Square(possRow, possCol)
+                    move=Move(initial, final)
+                    piece.addMoves(move)
+                else:
+                    break
+            for i in range(1, 8):
+                possRow = row - i
+                possCol = col - i
+                if Square.inrange(possRow, possCol):
+                    if self.squares[possRow][possCol].hasTeamPiece(piece.colour):
+                        break
+                    if self.squares[possRow][possCol].hasRivalPiece(piece.colour):
+                        initial=Square(row, col)
+                        final=Square(possRow, possCol)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
+                        break
+                    initial=Square(row, col)
+                    final=Square(possRow, possCol)
+                    move=Move(initial, final)
+                    piece.addMoves(move)
+                else:
+                    break
+            for i in range(1, 8):
+                possRow = row + i
+                possCol = col - i
+                if Square.inrange(possRow, possCol):
+                    if self.squares[possRow][possCol].hasTeamPiece(piece.colour):
+                        break
+                    if self.squares[possRow][possCol].hasRivalPiece(piece.colour):
+                        initial=Square(row, col)
+                        final=Square(possRow, possCol)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
+                        break
+                    initial=Square(row, col)
+                    final=Square(possRow, possCol)
+                    move=Move(initial, final)
+                    piece.addMoves(move)
+                else:
+                    break
+            for i in range(1, 8):
+                possRow = row + i
+                possCol = col + i
+                if Square.inrange(possRow, possCol):
+                    if self.squares[possRow][possCol].hasTeamPiece(piece.colour):
+                        break
+                    if self.squares[possRow][possCol].hasRivalPiece(piece.colour):
+                        initial=Square(row, col)
+                        final=Square(possRow, possCol)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
+                        break
+                    initial=Square(row, col)
+                    final=Square(possRow, possCol)
+                    move=Move(initial, final)
+                    piece.addMoves(move)
+                else:
+                    break
             
 
 
@@ -85,16 +231,17 @@ class Board:
             pawnMoves()
 
         if piece.name=='Bishop':
-            pass
+            diagMoves()
 
         if piece.name=='Knight':
             knightMoves()
 
         if piece.name=='Rook':
-            pass
+            lineMoves()
 
         if piece.name=='Queen':
-            pass
+            lineMoves()
+            diagMoves()
         
         if piece.name=='King':
             pass
