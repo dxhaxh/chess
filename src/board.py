@@ -2,6 +2,7 @@ from const import *
 from square import Square
 from piece import *
 from move import Move
+import copy
 
 class Board:
     def __init__(self):
@@ -80,8 +81,23 @@ class Board:
 
     def castled(self, initial, final):
         return abs(final.col-initial.col)==2 #return True if king castled
+    
+    def inCheck(self, piece, move):
+        tempBoard = copy.deepcopy(self)
+        tempPiece = copy.deepcopy(piece)
+        tempBoard.move(tempPiece, move)
+        for row in range(0, ROWS):
+            for col in range(0, COLS): 
+                if tempBoard.squares[row][col].hasRivalPiece(tempPiece.colour):
+                    p = tempBoard.squares[row][col].piece
+                    tempBoard.calcMoves(p, row, col, bool=False)
+                    for m in p.validMoves:
+                        if isinstance(m.final.piece, King):
+                            return True
+        return False
+    
 
-    def calcMoves(self, piece, row, col):
+    def calcMoves(self, piece, row, col, bool=True):
         #this method is huge and there is some repeated code, this could be simplified by creating some functions
         #to accomplish what the repeating code does
 
@@ -93,9 +109,14 @@ class Board:
                     poss=(row+i, col+j)
                     if Square.inrange(poss[0], poss[1]) and self.squares[poss[0]][poss[1]].isEmptyOrRival(piece.colour):
                         initial = Square(row, col)
-                        final = Square(poss[0], poss[1])
+                        finalPiece = self.squares[poss[0]][poss[1]].piece
+                        final = Square(poss[0], poss[1], finalPiece)
                         move = Move(initial, final)
-                        piece.addMoves(move)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
 
         def pawnMoves():
             if piece.moved:
@@ -113,7 +134,11 @@ class Board:
                     final=Square(possRow, col)
                     #now create move
                     move=Move(initial, final)
-                    piece.addMoves(move)
+                    if bool:
+                        if not self.inCheck(piece, move):
+                            piece.addMoves(move)
+                    else:
+                        piece.addMoves(move)
                 #either blocked or goes out of bounds
                 else:
                     break
@@ -124,9 +149,14 @@ class Board:
             for possCol in possCols:
                 if Square.inrange(possRow, possCol) and self.squares[possRow][possCol].hasRivalPiece(piece.colour):
                     initial=Square(row, col)
-                    final=Square(possRow, possCol)
+                    finalPiece = self.squares[possRow][possCol].piece
+                    final=Square(possRow, possCol, finalPiece)
                     move=Move(initial, final)
-                    piece.addMoves(move)
+                    if bool:
+                        if not self.inCheck(piece, move):
+                            piece.addMoves(move)
+                    else:
+                        piece.addMoves(move)
 
             
         def lineMoves():
@@ -137,14 +167,23 @@ class Board:
                         break
                     if self.squares[possRow][col].hasRivalPiece(piece.colour):
                         initial=Square(row, col)
-                        final=Square(possRow, col)
+                        finalPiece = self.squares[possRow][col].piece
+                        final=Square(possRow, col, finalPiece)
                         move=Move(initial, final)
-                        piece.addMoves(move)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
                         break
                     initial=Square(row, col)
                     final=Square(possRow, col)
                     move=Move(initial, final)
-                    piece.addMoves(move)
+                    if bool:
+                        if not self.inCheck(piece, move):
+                            piece.addMoves(move)
+                    else:
+                        piece.addMoves(move)
                 else:
                     break
             for i in range(1, 8):
@@ -154,14 +193,23 @@ class Board:
                         break
                     if self.squares[possRow][col].hasRivalPiece(piece.colour):
                         initial=Square(row, col)
-                        final=Square(possRow, col)
+                        finalPiece = self.squares[possRow][col].piece
+                        final=Square(possRow, col, finalPiece)
                         move=Move(initial, final)
-                        piece.addMoves(move)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
                         break
                     initial=Square(row, col)
                     final=Square(possRow, col)
                     move=Move(initial, final)
-                    piece.addMoves(move)
+                    if bool:
+                        if not self.inCheck(piece, move):
+                            piece.addMoves(move)
+                    else:
+                        piece.addMoves(move)
                 else:
                     break
             for j in range(1, 8):
@@ -171,14 +219,23 @@ class Board:
                         break
                     if self.squares[row][possCol].hasRivalPiece(piece.colour):
                         initial=Square(row, col)
-                        final=Square(row, possCol)
+                        finalPiece = self.squares[row][possCol].piece
+                        final=Square(row, possCol, finalPiece)
                         move=Move(initial, final)
-                        piece.addMoves(move)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
                         break
                     initial=Square(row, col)
                     final=Square(row, possCol)
                     move=Move(initial, final)
-                    piece.addMoves(move)
+                    if bool:
+                        if not self.inCheck(piece, move):
+                            piece.addMoves(move)
+                    else:
+                        piece.addMoves(move)
                 else:
                     break
             for j in range(1, 8):
@@ -188,14 +245,23 @@ class Board:
                         break
                     if self.squares[row][possCol].hasRivalPiece(piece.colour):
                         initial=Square(row, col)
-                        final=Square(row, possCol)
+                        finalPiece = self.squares[row][possCol].piece
+                        final=Square(row, possCol, finalPiece)
                         move=Move(initial, final)
-                        piece.addMoves(move)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
                         break
                     initial=Square(row, col)
                     final=Square(row, possCol)
                     move=Move(initial, final)
-                    piece.addMoves(move)
+                    if bool:
+                        if not self.inCheck(piece, move):
+                            piece.addMoves(move)
+                    else:
+                        piece.addMoves(move)
                 else:
                     break
 
@@ -208,14 +274,23 @@ class Board:
                         break
                     if self.squares[possRow][possCol].hasRivalPiece(piece.colour):
                         initial=Square(row, col)
-                        final=Square(possRow, possCol)
+                        finalPiece = self.squares[possRow][possCol].piece
+                        final=Square(possRow, possCol, finalPiece)
                         move=Move(initial, final)
-                        piece.addMoves(move)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
                         break
                     initial=Square(row, col)
                     final=Square(possRow, possCol)
                     move=Move(initial, final)
-                    piece.addMoves(move)
+                    if bool:
+                        if not self.inCheck(piece, move):
+                            piece.addMoves(move)
+                    else:
+                        piece.addMoves(move)
                 else:
                     break
             for i in range(1, 8):
@@ -226,14 +301,23 @@ class Board:
                         break
                     if self.squares[possRow][possCol].hasRivalPiece(piece.colour):
                         initial=Square(row, col)
-                        final=Square(possRow, possCol)
+                        finalPiece = self.squares[possRow][possCol].piece
+                        final=Square(possRow, possCol, finalPiece)
                         move=Move(initial, final)
-                        piece.addMoves(move)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
                         break
                     initial=Square(row, col)
                     final=Square(possRow, possCol)
                     move=Move(initial, final)
-                    piece.addMoves(move)
+                    if bool:
+                        if not self.inCheck(piece, move):
+                            piece.addMoves(move)
+                    else:
+                        piece.addMoves(move)
                 else:
                     break
             for i in range(1, 8):
@@ -244,14 +328,23 @@ class Board:
                         break
                     if self.squares[possRow][possCol].hasRivalPiece(piece.colour):
                         initial=Square(row, col)
-                        final=Square(possRow, possCol)
+                        finalPiece = self.squares[possRow][possCol].piece
+                        final=Square(possRow, possCol, finalPiece)
                         move=Move(initial, final)
-                        piece.addMoves(move)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
                         break
                     initial=Square(row, col)
                     final=Square(possRow, possCol)
                     move=Move(initial, final)
-                    piece.addMoves(move)
+                    if bool:
+                        if not self.inCheck(piece, move):
+                            piece.addMoves(move)
+                    else:
+                        piece.addMoves(move)
                 else:
                     break
             for i in range(1, 8):
@@ -262,14 +355,23 @@ class Board:
                         break
                     if self.squares[possRow][possCol].hasRivalPiece(piece.colour):
                         initial=Square(row, col)
-                        final=Square(possRow, possCol)
+                        finalPiece = self.squares[possRow][possCol].piece
+                        final=Square(possRow, possCol, finalPiece)
                         move=Move(initial, final)
-                        piece.addMoves(move)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
                         break
                     initial=Square(row, col)
                     final=Square(possRow, possCol)
                     move=Move(initial, final)
-                    piece.addMoves(move)
+                    if bool:
+                        if not self.inCheck(piece, move):
+                            piece.addMoves(move)
+                    else:
+                        piece.addMoves(move)
                 else:
                     break
             
@@ -285,12 +387,16 @@ class Board:
                         initial=Square(row, col)
                         final=Square(possRow, possCol)
                         move=Move(initial, final)
-                        piece.addMoves(move)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
 
             if not piece.moved:
             #kinside castling
                 rightRook = self.squares[row][7].piece
-                if rightRook.name=='Rook' and not rightRook.moved:
+                if isinstance(rightRook, Rook) and not rightRook.moved:
                     canCastleRight=False
                     for c in range(col+1, 7):
                         if self.squares[row][c].hasPiece():
@@ -299,16 +405,30 @@ class Board:
                             canCastleRight=True
                     if canCastleRight:
                         piece.rightRook = rightRook
-
-                        #kingMove
+                        
                         initial=Square(row, col)
-                        final=Square(row, 6)
-                        move=Move(initial, final)
-                        piece.addMoves(move)
+                        for c in range(col, 6+1):
+                            final=Square(row, c)
+                            move=Move(initial, final)
+                            if bool:
+                                if not self.inCheck(piece, move):
+                                    continue
+                                else:
+                                    canCastleRight=False
+                                    break
+                            else:
+                                continue
+
+                        if canCastleRight:
+                            #kingMove
+                            initial=Square(row, col)
+                            final=Square(row, 6)
+                            move=Move(initial, final)
+                            piece.addMoves(move)
 
             #queenside castle
                 leftRook = self.squares[row][0].piece
-                if leftRook.name=='Rook' and not leftRook.moved:
+                if isinstance(leftRook, Rook) and not leftRook.moved:
                     canCastleLeft=False
                     for c in range(1, col):
                         if self.squares[row][c].hasPiece():
@@ -318,11 +438,25 @@ class Board:
                     if canCastleLeft:
                         piece.leftRook = leftRook
 
-                        #kingMove
                         initial=Square(row, col)
-                        final=Square(row, 2)
-                        move=Move(initial, final)
-                        piece.addMoves(move)
+                        for c in range(2, 4+1):
+                            final=Square(row, c)
+                            move=Move(initial, final)
+                            if bool:
+                                if not self.inCheck(piece, move):
+                                    continue
+                                else:
+                                    canCastleLeft=False
+                                    break
+                            else:
+                                continue #?
+                        
+                        if canCastleLeft:
+                            #kingMove
+                            initial=Square(row, col)
+                            final=Square(row, 2)
+                            move=Move(initial, final)
+                            piece.addMoves(move)
 
 
 

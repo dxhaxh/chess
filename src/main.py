@@ -41,7 +41,7 @@ class Main:
                         piece = board.squares[clickedRow][clickedCol].piece
                         if piece.colour!=game.nextTurn:
                             continue
-                        board.calcMoves(piece, clickedRow, clickedCol)
+                        board.calcMoves(piece, clickedRow, clickedCol, bool=True)
                         dragger.saveInitial(event.pos)
                         dragger.dragPiece(piece)
                         
