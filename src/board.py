@@ -44,6 +44,9 @@ class Board:
         self.squares[initial.row][initial.col].piece = None
         self.squares[final.row][final.col].piece=piece
 
+        if piece.name=='Pawn':
+            self.checkPromotion(piece, final)
+
         piece.moved=True
 
         #clear valid moves
@@ -56,6 +59,10 @@ class Board:
         #of course we could use a hashset here to use in efficiently
         #but since validMoves array is never too large, we can consider this operation as an O(1) operation
         return move in piece.validMoves
+    
+    def checkPromotion(self, piece, final):
+        if final.row==0 or final.row==7:
+            self.squares[final.row][final.col].piece=Queen(piece.colour)
 
     def calcMoves(self, piece, row, col):
         #this method is huge and there is some repeated code, this could be simplified by creating some functions
