@@ -2,6 +2,7 @@ import pygame
 from const import *
 from board import Board
 from dragger import Dragger
+from square import Square
 
 class Game:
     def __init__(self):
@@ -68,6 +69,8 @@ class Game:
             pygame.draw.rect(surface, colour, rect, width=3)
 
     def setHover(self, row, col):
+        if not Square.inrange(row, col):
+            row, col = 0, 0
         self.hoveredSquare = self.board.squares[row][col]
 
     
