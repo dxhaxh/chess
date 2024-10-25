@@ -6,6 +6,7 @@ from move import Move
 class Board:
     def __init__(self):
         self.squares = [[0 for j in range(0, COLS)] for i in range(0, ROWS)]
+        self.lastMove = None
         self._create()
         self._addPieces('white')
         self._addPieces('black')
@@ -35,7 +36,30 @@ class Board:
         self.squares[otherRow][4] = Square(otherRow, 4, King(colour))
         
 
+    def move(self, piece, move):
+        initial = move.initial
+        final = move.final
+
+        #console board move update
+        self.squares[initial.row][initial.col].piece = None
+        self.squares[final.row][final.col].piece=piece
+
+        piece.moved=True
+
+        #clear valid moves
+        piece.validMoves = []
+
+        #set last move
+        self.lastMove = move
+
+    def validMove(self, piece, move):
+        #of course we could use a hashset here to use in efficiently
+        #but since validMoves array is never too large, we can consider this operation as an O(1) operation
+        return move in piece.validMoves
+
     def calcMoves(self, piece, row, col):
+        #this method is huge and there is some repeated code, this could be simplified by creating some functions
+        #to accomplish what the repeating code does
 
         def knightMoves():
             for i in [-2, -1, 1, 2]:
@@ -117,7 +141,7 @@ class Board:
                 else:
                     break
             for j in range(1, 8):
-                possCol = row+j
+                possCol = col+j
                 if Square.inrange(possCol):
                     if self.squares[row][possCol].hasTeamPiece(piece.colour):
                         break
@@ -134,7 +158,7 @@ class Board:
                 else:
                     break
             for j in range(1, 8):
-                possCol = row-j
+                possCol = col-j
                 if Square.inrange(possCol):
                     if self.squares[row][possCol].hasTeamPiece(piece.colour):
                         break
