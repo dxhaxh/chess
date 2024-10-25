@@ -36,6 +36,8 @@ class Main:
                     clickedCol=dragger.mouseX//SQUARE_SIZE
                     if board.squares[clickedRow][clickedCol].hasPiece():
                         piece = board.squares[clickedRow][clickedCol].piece
+                        if piece.colour!=game.nextTurn:
+                            continue
                         board.calcMoves(piece, clickedRow, clickedCol)
                         dragger.saveInitial(event.pos)
                         dragger.dragPiece(piece)
@@ -64,6 +66,7 @@ class Main:
                             board.move(dragger.piece, move)
                             game.showBackground(screen)
                             game.showPieces(screen)
+                            game.changeTurn()
                         else:
                             dragger.piece.validMoves=[]
                     dragger.undragPiece()

@@ -7,6 +7,7 @@ class Game:
     def __init__(self):
         self.board=Board()
         self.dragger=Dragger()
+        self.nextTurn='white'
 
     def showBackground(self, surface):
         for row in range(0, ROWS):
@@ -44,3 +45,10 @@ class Game:
 
                 rect = (move.final.col*SQUARE_SIZE, move.final.row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
                 pygame.draw.rect(surface, colourToBlit, rect)
+
+    
+    def changeTurn(self):
+        if self.nextTurn=='white':
+            self.nextTurn='black'
+        else:
+            self.nextTurn='white'
