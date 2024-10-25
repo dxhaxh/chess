@@ -33,7 +33,7 @@ class Board:
         self.squares[otherRow][5] = Square(otherRow, 5, Bishop(colour))
         self.squares[otherRow][3] = Square(otherRow, 3, Queen(colour))
         self.squares[otherRow][4] = Square(otherRow, 4, King(colour))
-        self.squares[4][4] = Square(4, 4, Queen('white'))
+        
 
     def calcMoves(self, piece, row, col):
 
@@ -225,6 +225,24 @@ class Board:
                 else:
                     break
             
+        
+        def kingMoves():
+            for i in range(-1, 2):
+                for j in range(-1, 2):
+                    if i==0 and j==0:
+                        continue
+                    possRow=row+i
+                    possCol=col+j
+                    if Square.inrange(possRow, possCol) and self.squares[possRow][possCol].isEmptyOrRival(piece.colour):
+                        initial=Square(row, col)
+                        final=Square(possRow, possCol)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
+
+            #kingside castle
+
+            #queenside castle
+
 
 
         if piece.name=='Pawn':
@@ -244,4 +262,4 @@ class Board:
             diagMoves()
         
         if piece.name=='King':
-            pass
+            kingMoves()
