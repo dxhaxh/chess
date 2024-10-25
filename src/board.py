@@ -1,6 +1,7 @@
 from const import *
 from square import Square
 from piece import *
+from move import Move
 
 class Board:
     def __init__(self):
@@ -32,3 +33,38 @@ class Board:
         self.squares[otherRow][5] = Square(otherRow, 5, Bishop(colour))
         self.squares[otherRow][3] = Square(otherRow, 3, Queen(colour))
         self.squares[otherRow][4] = Square(otherRow, 4, King(colour))
+
+    def calcMoves(self, piece, row, col):
+
+        def knightMoves():
+            for i in [-2, -1, 1, 2]:
+                for j in [-2, -1, 1, 2]:
+                    if abs(i)==abs(j):
+                        continue
+                    poss=(row+i, col+j)
+                    if Square.inrange(poss[0], poss[1]) and self.squares[poss[0]][poss[1]].isEmptyOrRival(piece.colour):
+                        initial = Square(row, col)
+                        final = Square(poss[0], poss[1])
+                        move = Move(initial, final)
+                        piece.addMoves(move)
+                        
+            
+
+
+        if piece.name=='Pawn':
+            pass
+
+        if piece.name=='Bishop':
+            pass
+
+        if piece.name=='Knight':
+            knightMoves()
+
+        if piece.name=='Rook':
+            pass
+
+        if piece.name=='Queen':
+            pass
+        
+        if piece.name=='King':
+            pass
