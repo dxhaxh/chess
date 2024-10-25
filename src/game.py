@@ -3,6 +3,7 @@ from const import *
 from board import Board
 from dragger import Dragger
 from square import Square
+from config import Config
 
 class Game:
     def __init__(self):
@@ -10,14 +11,15 @@ class Game:
         self.dragger=Dragger()
         self.nextTurn='white'
         self.hoveredSquare=None
+        self.config=Config()
 
     def showBackground(self, surface):
         for row in range(0, ROWS):
             for col in range(0, COLS):
                 if (row+col)%2==0:
-                    colour=(234, 235, 200) #dark square
+                    colour=self.config.activeTheme.bg.light #light square
                 else:
-                    colour=(119, 154, 88)  #light square
+                    colour=self.config.activeTheme.bg.dark  #dark square
 
                 rect = pygame.Rect(col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
                 pygame.draw.rect(surface, colour, rect)
@@ -41,10 +43,9 @@ class Game:
 
             for move in piece.validMoves:
                 if (move.final.row + move.final.col)%2==0:
-                    colourToBlit='#C86464'
+                    colourToBlit=self.config.activeTheme.moves.light
                 else:
-                    colourToBlit='#C84646'
-
+                    colourToBlit=self.config.activeTheme.moves.dark
                 rect = (move.final.col*SQUARE_SIZE, move.final.row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
                 pygame.draw.rect(surface, colourToBlit, rect)
 
@@ -55,9 +56,9 @@ class Game:
             final = self.board.lastMove.final
             for pos in [initial, final]:
                 if (pos.row+pos.col)%2==0:
-                    colour = (244, 247, 116)
+                    colour = self.config.activeTheme.trace.light
                 else:
-                    colour = (172, 195, 51)
+                    colour = self.config.activeTheme.trace.dark
                 rect = (pos.col*SQUARE_SIZE, pos.row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
                 pygame.draw.rect(surface, colour, rect)
 
@@ -79,3 +80,12 @@ class Game:
             self.nextTurn='black'
         else:
             self.nextTurn='white'
+
+    def changeTheme(self):
+        self.config.changeTheme()
+
+    def soundEffect(self, captured=False):
+        if captured:
+            self.config.captureSound.play()
+        else:
+            self.config.moveSound.play()

@@ -98,7 +98,7 @@ class Board:
             possRow = row + piece.direction
             possCols = [col-1, col+1]
             for possCol in possCols:
-                if Square.inrange(possCol) and self.squares[possRow][possCol].hasRivalPiece(piece.colour):
+                if Square.inrange(possRow, possCol) and self.squares[possRow][possCol].hasRivalPiece(piece.colour):
                     initial=Square(row, col)
                     final=Square(possRow, possCol)
                     move=Move(initial, final)
