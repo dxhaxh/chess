@@ -8,6 +8,7 @@ class Game:
         self.board=Board()
         self.dragger=Dragger()
         self.nextTurn='white'
+        self.hoveredSquare=None
 
     def showBackground(self, surface):
         for row in range(0, ROWS):
@@ -45,6 +46,29 @@ class Game:
 
                 rect = (move.final.col*SQUARE_SIZE, move.final.row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
                 pygame.draw.rect(surface, colourToBlit, rect)
+
+    
+    def showLastMove(self, surface):
+        if self.board.lastMove:
+            initial = self.board.lastMove.initial
+            final = self.board.lastMove.final
+            for pos in [initial, final]:
+                if (pos.row+pos.col)%2==0:
+                    colour = (244, 247, 116)
+                else:
+                    colour = (172, 195, 51)
+                rect = (pos.col*SQUARE_SIZE, pos.row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
+                pygame.draw.rect(surface, colour, rect)
+
+    
+    def showHover(self, surface):
+        if self.hoveredSquare:
+            colour = (180, 180, 180)
+            rect = (self.hoveredSquare.col*SQUARE_SIZE, self.hoveredSquare.row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
+            pygame.draw.rect(surface, colour, rect, width=3)
+
+    def setHover(self, row, col):
+        self.hoveredSquare = self.board.squares[row][col]
 
     
     def changeTurn(self):

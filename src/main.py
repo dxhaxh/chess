@@ -22,8 +22,11 @@ class Main:
 
         while True:
             game.showBackground(screen)
+            game.showLastMove(screen)
             game.showMoves(screen)
             game.showPieces(screen)
+
+            game.showHover(screen)
 
             if dragger.dragging:
                 dragger.updateBlit(screen)
@@ -43,15 +46,21 @@ class Main:
                         dragger.dragPiece(piece)
                         
                         game.showBackground(screen)
+                        game.showLastMove(screen)
                         game.showMoves(screen)
                         game.showPieces(screen)
 
                 elif event.type == pygame.MOUSEMOTION:
+                    motionRow=event.pos[1]//SQUARE_SIZE
+                    motionCol=event.pos[0]//SQUARE_SIZE
+                    game.setHover(motionRow, motionCol)
                     if dragger.dragging:
                         dragger.updateMouse(event.pos)
                         game.showBackground(screen)
+                        game.showLastMove(screen)
                         game.showMoves(screen)
                         game.showPieces(screen)
+                        game.showHover(screen)
                         dragger.updateBlit(screen)
 
                 elif event.type == pygame.MOUSEBUTTONUP:
@@ -65,6 +74,7 @@ class Main:
                         if board.validMove(dragger.piece, move):
                             board.move(dragger.piece, move)
                             game.showBackground(screen)
+                            game.showLastMove(screen)
                             game.showPieces(screen)
                             game.changeTurn()
                         else:
