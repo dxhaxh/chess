@@ -47,4 +47,6 @@ class Queen(Piece):
 class King(Piece):
     def __init__(self, colour):
         super().__init__('King', colour, 10**9)  #very high value since king is the most important piece of the game
+        self.leftRook=None
+        self.rightRook=None
 

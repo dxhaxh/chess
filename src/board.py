@@ -47,6 +47,20 @@ class Board:
         if piece.name=='Pawn':
             self.checkPromotion(piece, final)
 
+        if piece.name=='King':
+            if self.castled(initial, final):
+                diff=final.col-initial.col
+                if diff<0:
+                    rook = piece.leftRook
+                    rookInitial = Square(initial.row, 0)
+                    rookFinal = Square(final.row, 3)
+                else:
+                    rook = piece.rightRook
+                    rookInitial = Square(initial.row, 7)
+                    rookFinal = Square(final.row, 5)
+                
+                self.move(rook, Move(rookInitial, rookFinal))
+
         piece.moved=True
 
         #clear valid moves
@@ -63,6 +77,9 @@ class Board:
     def checkPromotion(self, piece, final):
         if final.row==0 or final.row==7:
             self.squares[final.row][final.col].piece=Queen(piece.colour)
+
+    def castled(self, initial, final):
+        return abs(final.col-initial.col)==2 #return True if king castled
 
     def calcMoves(self, piece, row, col):
         #this method is huge and there is some repeated code, this could be simplified by creating some functions
@@ -270,9 +287,42 @@ class Board:
                         move=Move(initial, final)
                         piece.addMoves(move)
 
-            #kingside castle
+            if not piece.moved:
+            #kinside castling
+                rightRook = self.squares[row][7].piece
+                if rightRook.name=='Rook' and not rightRook.moved:
+                    canCastleRight=False
+                    for c in range(col+1, 7):
+                        if self.squares[row][c].hasPiece():
+                            break
+                        if c==7-1:
+                            canCastleRight=True
+                    if canCastleRight:
+                        piece.rightRook = rightRook
+
+                        #kingMove
+                        initial=Square(row, col)
+                        final=Square(row, 6)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
 
             #queenside castle
+                leftRook = self.squares[row][0].piece
+                if leftRook.name=='Rook' and not leftRook.moved:
+                    canCastleLeft=False
+                    for c in range(1, col):
+                        if self.squares[row][c].hasPiece():
+                            break
+                        if c==col-1:
+                            canCastleLeft=True
+                    if canCastleLeft:
+                        piece.leftRook = leftRook
+
+                        #kingMove
+                        initial=Square(row, col)
+                        final=Square(row, 2)
+                        move=Move(initial, final)
+                        piece.addMoves(move)
 
 
 
