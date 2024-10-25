@@ -47,12 +47,42 @@ class Board:
                         final = Square(poss[0], poss[1])
                         move = Move(initial, final)
                         piece.addMoves(move)
-                        
+
+        def pawnMoves():
+            if piece.moved:
+                steps=1
+            else:
+                steps=2
+            
+            #vertical moves
+            start=row+piece.direction
+            end=row+(piece.direction*(1+steps))
+            for possRow in range(start, end, piece.direction):
+                if Square.inrange(possRow) and not self.squares[possRow][col].hasPiece():
+                    #create initial and final move squares 
+                    initial=Square(row, col)
+                    final=Square(possRow, col)
+                    #now create move
+                    move=Move(initial, final)
+                    piece.addMoves(move)
+                #either blocked or goes out of bounds
+                else:
+                    break
+
+            #diagonal moves
+            possRow = row + piece.direction
+            possCols = [col-1, col+1]
+            for possCol in possCols:
+                if Square.inrange(possCol) and self.squares[possRow][possCol].hasRivalPiece(piece.colour):
+                    initial=Square(row, col)
+                    final=Square(possRow, possCol)
+                    move=Move(initial, final)
+                    piece.addMoves(move)
             
 
 
         if piece.name=='Pawn':
-            pass
+            pawnMoves()
 
         if piece.name=='Bishop':
             pass
