@@ -115,6 +115,18 @@ class Board:
                     self.squares[row][col].piece.enPassant = False
         if isinstance(piece, Pawn):
             piece.enPassant = bool
+
+    def isOver(self, colour):
+        totPossMoves=0
+        for row in range(0, ROWS):
+            for col in range(0, COLS):
+                if self.squares[row][col].hasPiece() and self.squares[row][col].piece.colour==colour:
+                    p=self.squares[row][col].piece
+                    initialList = p.validMoves[:]
+                    self.calcMoves(p, row, col)
+                    totPossMoves+=len(p.validMoves)
+                    p.validMoves=initialList
+        return totPossMoves==0
     
 
     def calcMoves(self, piece, row, col, bool=True):

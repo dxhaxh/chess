@@ -79,6 +79,11 @@ class Main:
                             game.showPieces(screen)
                             game.changeTurn()
                             game.soundEffect(captured)
+                            if board.isOver(game.nextTurn):
+                                if game.nextTurn=='white':
+                                    print('black wins')
+                                else:
+                                    print('white wins')
                         else:
                             dragger.piece.validMoves=[]
                     dragger.undragPiece()
