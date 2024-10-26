@@ -23,5 +23,6 @@ class Config:
         blue = Theme((229, 228, 200), (60, 95, 135), (123, 187, 227), (43, 119, 191), '#C86464', '#C84646')
         gray = Theme((120, 119, 118), (86, 85, 84), (99, 126, 143), (82, 102, 128), '#C86464', '#C84646')
         pink = Theme((255, 194, 227), (235, 52, 152), (244, 247, 116), (172, 195, 51), '#65cfb6', '#50a18e')
+        conttonCandy = Theme((204, 255, 255), (255, 145, 224), (123, 187, 227), (92, 179, 250), '#fc44e7', '#fa1be0')
 
-        self.themes=[green, brown, blue, gray, pink]
+        self.themes=[green, brown, blue, gray, pink, conttonCandy]

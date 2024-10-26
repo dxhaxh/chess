@@ -27,6 +27,7 @@ class Pawn(Piece):
             self.direction=1
 
         super().__init__('Pawn', colour, 1)
+        self.enPassant=False
 
 class Knight(Piece):
     def __init__(self, colour):

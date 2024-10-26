@@ -41,12 +41,21 @@ class Board:
         initial = move.initial
         final = move.final
 
+        isEnPassant = not self.squares[final.row][final.col].hasPiece()
         #console board move update
         self.squares[initial.row][initial.col].piece = None
         self.squares[final.row][final.col].piece=piece
 
+        self.setEnPassant(piece, False)
+
         if piece.name=='Pawn':
             self.checkPromotion(piece, final)
+            if self.enPassant(initial, final):
+                self.setEnPassant(piece, True)
+            if final.col!=initial.col and isEnPassant:
+                self.squares[initial.row][final.col].piece = None
+                self.squares[final.row][final.col].piece=piece
+                
 
         if piece.name=='King':
             if self.castled(initial, final):
@@ -95,6 +104,17 @@ class Board:
                         if isinstance(m.final.piece, King):
                             return True
         return False
+    
+    def enPassant(self, initial, final):
+        return abs(final.row-initial.row)==2
+    
+    def setEnPassant(self, piece, bool):
+        for row in range(0, ROWS):
+            for col in range(0, COLS):
+                if isinstance(self.squares[row][col].piece, Pawn) and self.squares[row][col].piece.colour==piece.colour:
+                    self.squares[row][col].piece.enPassant = False
+        if isinstance(piece, Pawn):
+            piece.enPassant = bool
     
 
     def calcMoves(self, piece, row, col, bool=True):
@@ -157,6 +177,38 @@ class Board:
                             piece.addMoves(move)
                     else:
                         piece.addMoves(move)
+
+            #en passant moves
+            if piece.colour=='white':
+                r=3
+                f=2
+            else:
+                r=4
+                f=5
+            if Square.inrange(col-1) and row==r:
+                if self.squares[row][col-1].hasRivalPiece(piece.colour):
+                    p=self.squares[row][col-1].piece
+                    if isinstance(p, Pawn) and p.enPassant:
+                        initial=Square(row, col)
+                        final=Square(f, col-1, p)
+                        move=Move(initial, final)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)          
+            if Square.inrange(col+1) and row==r:
+                if self.squares[row][col+1].hasRivalPiece(piece.colour):
+                    p=self.squares[row][col+1].piece
+                    if isinstance(p, Pawn) and p.enPassant:
+                        initial=Square(row, col)
+                        final=Square(f, col+1, p)
+                        move=Move(initial, final)
+                        if bool:
+                            if not self.inCheck(piece, move):
+                                piece.addMoves(move)
+                        else:
+                            piece.addMoves(move)
 
             
         def lineMoves():
