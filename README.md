@@ -7,7 +7,6 @@ To change the theme press t.
 To restart the game press r.   
 When a piece is selected, possible move squares are highlighted(in red). The last move is also highlighted(in yellow)
 
-![image](https://github.com/user-attachments/assets/fc35f4c5-3ead-497a-bb45-cc6d03ed4703)   
 ![image](https://github.com/user-attachments/assets/25ae074c-6448-4894-a373-47b3ec458e08)   
 
 Here only valid move for the black biship is to defend check   
