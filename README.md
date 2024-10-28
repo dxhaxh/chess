@@ -9,13 +9,13 @@ When a piece is selected, possible move squares are highlighted(in red). The las
 
 ![image](https://github.com/user-attachments/assets/25ae074c-6448-4894-a373-47b3ec458e08)   
 
-Here only valid move for the black biship is to defend check   
+Here only valid move for the black bishop is to defend check   
 ![image](https://github.com/user-attachments/assets/a7e1743e-ca8d-4517-896a-90ed63b4e0e5)   
 
 Here the queen cannot move to a different column, otherwise the king would be in check because of the black rook   
 ![image](https://github.com/user-attachments/assets/aaf1222f-7045-46af-b221-35bfbcecf696)   
 
-Here we can see that en passant is properly implemented, the white pawn should have the opportunity to capture diagonaly to the right since the black pawn to it's right moved 2 squares as it's first move. The black pawn on the left should not be able to be captured on this turn since it did not perform the last move.   
+Here we can see that en passant is properly implemented, the white pawn should have the opportunity to capture diagonally to the right since the black pawn to it's right moved 2 squares as it's first move. The black pawn on the left should not be able to be captured on this turn since it did not perform the last move.   
 ![image](https://github.com/user-attachments/assets/f717ee09-aba7-43ce-9ce0-0d0a165eef31)
 
 
