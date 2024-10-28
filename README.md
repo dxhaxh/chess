@@ -15,7 +15,7 @@ Here only valid move for the black biship is to defend check
 Here the queen cannot move to a different column, otherwise the king would be in check because of the black rook   
 ![image](https://github.com/user-attachments/assets/aaf1222f-7045-46af-b221-35bfbcecf696)   
 
-Here we can see that en passant is properly implemented, the white pawn should have the opportunity to capture diagonaly to the right since we the black pawn to it's right moved 2 squares as it's first move. The black pawn on the left should not be able to be captured on this turn since it did not perform the last move.   
+Here we can see that en passant is properly implemented, the white pawn should have the opportunity to capture diagonaly to the right since the black pawn to it's right moved 2 squares as it's first move. The black pawn on the left should not be able to be captured on this turn since it did not perform the last move.   
 ![image](https://github.com/user-attachments/assets/f717ee09-aba7-43ce-9ce0-0d0a165eef31)
 
 
